@@ -294,7 +294,7 @@ server.setRequestHandler('tools/call', async (request) => {
         const duracionEstimada = calculateETA(distancia);
 
         // Calcular tarifa estimada
-        const tarifaEstimada = fareCalc.calculate(distancia, duracionEstimada);
+        const tarifaEstimada = await fareCalc.calculate(distancia, duracionEstimada);
 
         // Crear el viaje en la base de datos
         const { data: viaje, error } = await supabase
@@ -339,7 +339,7 @@ server.setRequestHandler('tools/call', async (request) => {
         const { distancia_km, duracion_min, tipo_servicio = 'el_pana', moneda = 'BS' } = args;
         
         const duracion = duracion_min || calculateETA(distancia_km);
-        const tarifa = fareCalc.calculate(distancia_km, duracion, { currency: moneda });
+        const tarifa = await fareCalc.calculate(distancia_km, duracion, { currency: moneda });
 
         return {
           content: [
@@ -462,7 +462,7 @@ server.setRequestHandler('tools/call', async (request) => {
         const { viaje_id, distancia_real_km, duracion_real_min, calificacion } = args;
 
         // Calcular tarifa final
-        const tarifaFinal = fareCalc.calculate(distancia_real_km, duracion_real_min);
+        const tarifaFinal = await fareCalc.calculate(distancia_real_km, duracion_real_min);
 
         const updateData = {
           status: 'completed',
